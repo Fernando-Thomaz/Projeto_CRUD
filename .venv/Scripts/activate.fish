@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV 'C:\Users\ead\Documents\Fernando\Projeto_CURD\.venv'
+set -gx VIRTUAL_ENV 'c:\GIT\Projeto_CRUD\.venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"Scripts $PATH
