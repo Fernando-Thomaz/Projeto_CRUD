@@ -1,94 +1,148 @@
+# pega a função "get_connet"
 from connection import get_connet
+
+# biblioteca
 from passlib.hash import pbkdf2_sha256 as sha256
 
-def criar_usuario(ID, NOME, EMAIL, SENHA):
+# função para criar usuario
+def criar_usuario(nome, email, senha):
+    # tratar erros
     try:
+        # conecta ao banco
         conn = get_connet()
+
+        # comanda o banco
         cursor = conn.cursor()
 
-        cursor.execute('INSERT INTO TB_USUARIO(ID, NOME, EMAIL, SENHA) VALUES (?, ?, ?, ?)',
-                        (ID, NOME, EMAIL, SENHA)
+        # executa codigos na sql
+        cursor.execute('INSERT INTO TB_USUARIO(nome, email, senha) VALUES (?, ?, ?)',
+                       (nome, email, senha)
         )
 
+        # commita no banco
         conn.commit()
         print('Usuário cadastrado com sucesso!')
 
+    # trata erros
     except Exception as e:
-        print(f'Falha ao criar tabela: {e}')
+        print(f'Falha ao criar usuario: {e}')
 
-    finally:
-        cursor.close()
-        conn.close()
-
+# função para listar usuarios
 def listar_usuario():
+    # trata erros
     try:
+        # conecta ao banco
         conn = get_connet()
+
+        # comanda o banco
         cursor = conn.cursor()
-        cursor.execute("SELECT ID, NOME, EMAIL, SENHA FROM TB_USUARIO")
-        usuario = cursor.fetchall
-        if usuario:
-            print(f"{30*"-"}Lista de usuários!{30*"-"}")
-            for u in usuario:
-                print(u)
-        
+
+        # executa o codigo no sql
+        cursor.execute('SELECT NOME, EMAIL, SENHA FROM TB_USUARIO')
+
+        #
+        usuarios = cursor.fetchall()
+
+        # se tiver usuarios
+        if usuarios:
+            print(f'{30*'-'}Lista de usuarios!{30*'-'}')
+
+            # mostrar os usuarios
+            for u in usuarios:
+                print(f'| {u}')
+
+        # se nao tiver usuarios
         else:
-            print("Nenhum usuário encontrado!")
+            print('Nenhum usuário encontrado!')
 
+    # tratar erros
     except Exception as e:
-        print(f'Falha ao listar usuario: {e}')
+        print(f'Falha ao criar usuario: {e}')
 
-def exlcuir_usuario(ID):
+# função de excluir usuario
+def excluir_usuario(id):
+    # tratar erros
     try:
+        # conecta ao banco
         conn = get_connet()
+
+        # comanda o banco
         cursor = conn.cursor()
-        cursor.execute('''
-            DELETE FROM TB_USUARIO WHERE ID = ?
-                       ''',(ID))
+
+        # executa o codigo no sql
+        cursor.execute("""
+            DELETE FROM TB_USUARIO WHERE ID=?
+        """, (id,))
+        
+        # comita no banco
         conn.commit()
-        print(f"Usuário deletado com sucesso!")
 
+    # tratar erros
     except Exception as e:
-        print(f"Falha em excluir usuario {e}")
+        print(f'Falha ao criar usuario: {e}')
 
-def editar_usuario(ID):
-    ...
-
-def listar_usuario_email(EMAIL):
-    ...
-
-def listar_usuario_id(ID):
-    ...
-
-def criar_tabela():
-    try:    
+# função para editar e atualizar os usuarios
+def editar_usuario(id):
+    # tratar erros
+    try:
+        # conecta ao banco
         conn = get_connet()
+
+        # comanda o banco
         cursor = conn.cursor()
 
+    # tratar erros
+    except Exception as e:
+        print(f'Falha ao criar usuario: {e}')
+
+# função para mostrar os emails dos usuarios
+def listar_usuario_email(email):
+    # tratar erros
+    try:
+        # conecta ao banco
+        conn = get_connet()
+
+        # comanda o banco
+        cursor = conn.cursor()
+
+    # tratar erros
+    except Exception as e:
+        print(f'Falha ao criar usuario: {e}')
+
+# função para mostrar os ids dos usuarios
+def listar_usuario_id(id):
+    # tratar erros
+    try:
+        # conecta ao banco
+        conn = get_connet()
+
+        # comanda o banco
+        cursor = conn.cursor()
+
+    # tratar erros
+    except Exception as e:
+        print(f'Falha ao criar usuario: {e}')
+
+# função para criar o banco
+def criar_tabela():
+    # tratar codigo
+    try:
+        # conecta o banco
+        conn = get_connet()
+
+        # comanda o banco
+        cursor = conn.cursor()
+
+        # executa o comando no sql
         cursor.execute('''
         CREATE TABLE TB_USUARIO(
-	        ID INTERGER PRIMARY KEY ,
+            ID INTEGER PRIMARY KEY,
             NOME VARCHAR(120) NOT NULL,
             EMAIL VARCHAR(120) UNIQUE,
-            SENHA VARCHAR(255)               
-                       
-        );                            
+            SENHA VARCHAR(255)
+        );
         ''')
 
+    # tratar erros
     except Exception as e:
         print(f'Falha ao criar tabela: {e}')
-    
-    finally:
-        cursor.close()
-        conn.close()
-
-if __name__ == '__main__':
-    criar_tabela()
-    ID = input('Digite um id: ')
-    nome = input('Digite um nome: ').strip().title()
-    email = input('Digite o email: ').strip()
-    senha = input('Digite uma senha: ').strip()
-    senha = sha256.hash(senha)
-    print(senha)
-    criar_usuario(ID, nome, email, senha)
-    listar_usuario()
-    exlcuir_usuario(ID)
