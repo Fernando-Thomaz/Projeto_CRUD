@@ -1,2 +1,0 @@
-#pip install no repositorio requirements
-mysql-connector-python==9.4.0
