@@ -1,15 +1,38 @@
 # pega a função "get_connet"
-from connection import get_connet
+from connection import *
 
 # biblioteca
 from passlib.hash import pbkdf2_sha256 as sha256
+
+def cadastrar_produto(nome, preco, quant):
+    # tratar erros
+    try:
+        # conecta ao banco
+        conn = get_connet_pro()
+
+        # controlar banco
+        cursor = conn.cursor()
+
+        # executa em sql
+        cursor.execute('INSERT INTO TB_PRODUTO(NOME, PRECO, QUANTIDADE) VALUES(?, ?, ?)', (nome, preco, quant))
+
+        # commita o banco
+        conn.commit()
+        print('Produto cadastrado com sucesso!!')
+        input('Pressione ENTER para continuar')
+
+    # trata erros
+    except Exception as e:
+        print(f'Falha ao cadastrar produto: {e}')
+        input(f"Pressione ENTER para continuar")
+
 
 # função para criar usuario
 def criar_usuario(nome, email, senha):
     # tratar erros
     try:
         # conecta ao banco
-        conn = get_connet()
+        conn = get_connet_pro()
 
         # comanda o banco
         cursor = conn.cursor()
@@ -29,33 +52,34 @@ def criar_usuario(nome, email, senha):
         input(f"Pressione ENTER para continuar")
 
 # função para listar usuarios
-def listar_usuario(nome):
+def listar_produto():
     # trata erros
     try:
         # conecta ao banco
-        conn = get_connet()
+        conn = get_connet_pro()
 
         # comanda o banco
         cursor = conn.cursor()
 
         # executa o codigo no sql
-        cursor.execute('SELECT ID, NOME, EMAIL, SENHA FROM TB_USUARIO WHERE NOME = ?',(nome,))
+        cursor.execute('SELECT ID, NOME, PRECO, QUANTIDADE FROM TB_PRODUTO')
     
         # salva as coisas selecionadas
-        usuarios = cursor.fetchall()
+        produtos = cursor.fetchall()
 
         # se tiver usuarios
-        if usuarios:
-            print(f'{30*'-'}Lista de usuarios!{30*'-'}')
+        if produtos:
+            print(f'{30*'-'}Lista de produtos!{30*'-'}')
+            print(f"ID | DESCRIÇÂO | PREÇO | QUANTIDADE")
 
             # mostrar os usuarios
-            for u in usuarios:
+            for u in produtos:
                 print(f'| {u}')
             input(f"Pressione ENTER para continuar")
 
         # se nao tiver usuarios
         else:
-            print('Nenhum usuário encontrado!')
+            print('Nenhum produto encontrado!')
             input(f"Pressione ENTER para continuar")
 
     # tratar erros
@@ -64,147 +88,70 @@ def listar_usuario(nome):
         input(f"Pressione ENTER para continuar")
 
 # função de excluir usuario
-def excluir_usuario(id):
+def vender_produto(quanti, id):
     # tratar erros
     try:
         # conecta ao banco
-        conn = get_connet()
+        conn = get_connet_pro()
 
         # comanda o banco
         cursor = conn.cursor()
 
-        # executa o codigo no sql
-        cursor.execute("DELETE FROM TB_USUARIO WHERE ID = ?", (id,))
-        
+        # executa no sql
+        quantidade = cursor.execute('SELECT QUANTIDADE FROM TB_PRODUTO WHERE ID = ?', (id))
+        quanto = quantidade
+
+        # se nao tiver mais produto
+        if quanto >= 0:
+            # execute o codgio em sql
+            cursor.execute('UPDATE TB_PRODUTO SET QUANTIDADE = ? WHERE ID = ?', (quantidade, id))
+
+        else:
+            cursor.execute('DELETE FROM TB_PRODUTO WHERE ID = ?', (id))
+
         # comita no banco
         conn.commit()
-        print(f"Usuario deletado com sucesso!")
+        print(f"Produto vendido com sucesso!")
         input(f"Pressione ENTER para continuar")
 
     # tratar erros
     except Exception as e:
-        print(f'Falha ao excluir usuario: {e}')
+        print(f'Falha ao vender produto: {e}')
         input(f"Pressione ENTER para continuar")
 
 # função para editar e atualizar os usuarios
-def editar_usuario(id, escolha):
+def editar_produto(id):
     # tratar erros
     try:
         # conecta ao banco
-        conn = get_connet()
+        conn = get_connet_pro()
 
         # comanda o banco
         cursor = conn.cursor()
 
-        # possiveis escolhas
-        match escolha:
-            case "1":
-                nome = input(f"Digite seu novo nome: ").strip().title()
+        produto = input(f"Digite o nome do novo produto: ").strip().title()
+        preco = float(input(f"Digite o novo preço: ").replace(".",","))
+        quantidade = int(input(f"Digite a nova quantidade: "))
 
-                # atualiza as informações
-                cursor.execute("UPDATE TB_USUARIO SET NOME = ? WHERE ID = ?", (nome, id))
-                print(f"Nome alterado com sucesso!!")
-
-            case "2":
-                email = input(f"Digite seu novo email: ").strip().title()
-
-                # atualiza as informações
-                cursor.execute("UPDATE TB_USUARIO SET EMAIL = ? WHERE ID = ?", (email, id))
-                print(f"Email alterado com sucesso!!")
-
-            case "3":
-                senha = input(f"Digite a sua nova senha: ").strip()
-
-                # atualiza as informações
-                cursor.execute("UPDATE TB_USUARIO SET SENHA = ? WHERE ID = ?", (senha, id))
-                print(f"Senha alterada com sucesso!!")
-                
+        # atualiza as informações
+        cursor.execute("UPDATE TB_PRODUTO SET NOME = ?, PRECO = ?, QUANTIDADE = ? WHERE ID = ?", (produto, preco, quantidade, id))
 
         # salvar no banco
         conn.commit()
+        print(f"Produto alterado com sucesso!!")
         input(f"Pressione ENTER para continuar")
 
     # tratar erros
     except Exception as e:
-        print(f'Falha ao editar usuario: {e}')
-        input(f"Pressione ENTER para continuar")
-
-# função para mostrar os emails dos usuarios
-def listar_usuario_email(email):
-    # tratar erros
-    try:
-        # conecta ao banco
-        conn = get_connet()
-
-        # comanda o banco
-        cursor = conn.cursor()
-
-        # executa o codigo no sql
-        cursor.execute('SELECT ID, NOME, EMAIL, SENHA FROM TB_USUARIO WHERE EMAIL = ?',(email,))
-    
-        #
-        usuarios = cursor.fetchall()
-
-        # se tiver usuarios
-        if usuarios:
-            print(f'{30*'-'}Lista de usuarios!{30*'-'}')
-
-            # mostrar os usuarios
-            for u in usuarios:
-                print(f'| {u}')
-            input(f"Pressione ENTER para continuar")
-
-        # se nao tiver usuarios
-        else:
-            print('Nenhum usuário encontrado!')
-            input(f"Pressione ENTER para continuar")
-
-    # tratar erros
-    except Exception as e:
-        print(f'Falha ao listar usuario: {e}')
-        input(f"Pressione ENTER para continuar")
-
-# função para mostrar os ids dos usuarios
-def listar_usuario_id(id):
-    # tratar erros
-    try:
-        # conecta ao banco
-        conn = get_connet()
-
-        # comanda o banco
-        cursor = conn.cursor()
-
-        # executa o codigo no sql
-        cursor.execute('SELECT ID, NOME, EMAIL, SENHA FROM TB_USUARIO WHERE ID = ?',(id,))
-    
-        #
-        usuarios = cursor.fetchall()
-
-        # se tiver usuarios
-        if usuarios:
-            print(f'{30*'-'}Lista de usuarios!{30*'-'}')
-
-            # mostrar os usuarios
-            for u in usuarios:
-                print(f'| {u}')
-            input(f"Pressione ENTER para continuar")
-
-        # se nao tiver usuarios
-        else:
-            print('Nenhum usuário encontrado!')
-            input(f"Pressione ENTER para continuar")
-
-    # tratar erros
-    except Exception as e:
-        print(f'Falha ao listar usuario: {e}')
+        print(f'Falha ao editar produto: {e}')
         input(f"Pressione ENTER para continuar")
 
 # função para criar o banco
-def criar_tabela():
+def criar_tabela_usu():
     # tratar codigo
     try:
         # conecta o banco
-        conn = get_connet()
+        conn = get_connet_pro()
 
         # comanda o banco
         cursor = conn.cursor()
@@ -216,6 +163,31 @@ def criar_tabela():
             NOME VARCHAR(120) NOT NULL,
             EMAIL VARCHAR(120) UNIQUE,
             SENHA VARCHAR(256)
+        );
+        ''')
+
+    # tratar erros
+    except Exception as e:
+        print(f'Falha ao criar tabela: {e}')
+        input(f"Pressione ENTER para continuar")
+
+# função para criar o banco
+def criar_tabela_pro():
+    # tratar codigo
+    try:
+        # conecta o banco
+        conn = get_connet_pro()
+
+        # comanda o banco
+        cursor = conn.cursor()
+
+        # executa o comando no sql
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS TB_PRODUTO(
+            ID INTEGER PRIMARY KEY,
+            NOME VARCHAR(120) NOT NULL,
+            PRECO INTERGER NOT NULL,
+            QUANTIDADE INTERGER NOT NULL
         );
         ''')
 

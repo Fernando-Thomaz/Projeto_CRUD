@@ -8,22 +8,53 @@ import os
 limpar = lambda:os.system("cls" if os.name == "nt" else "clear")
 
 # criar tabela se nao tiver
-criar_tabela()
+criar_tabela_usu()
+criar_tabela_pro()
+
+# função de login e cadastrar
+def conta():
+    while True:
+        try:
+            limpar()
+            #menu
+            print(f"{30*"-"}Conta{30*"-"}")
+            print(f"1 - Cadastrar")
+            print(f"2 - Login")
+            print(f"3 - Sair")
+
+            # usuario escolhe
+            escolha = input(f"Escolha uma opção: ")
+            
+            match escolha:
+                case "1":
+                    ...
+
+                case "2":
+                    ...
+
+                case "3":
+                    print(f"Saindo do sistema...")
+                    break
+
+         # tratar erros
+        except Exception as e:
+            print(f"ERROR: {e}")
+            input(f"Pressione ENTER para continuar")
 
 # função de menu
-def menu():
+def menu_principal():
     # loop
     while True:
         # tratar erros
         try:
             limpar()
             #menu
-            print(f"{30*"-"}CONTROLE DE USUARIOS{30*"-"}")
-            print(f"1 - Create")
-            print(f"2 - Read")
-            print(f"3 - Update")
-            print(f"4 - Delete")
-            print(f"5 - Exit")
+            print(f"{30*"-"}Mercado{30*"-"}")
+            print(f"1 - Cadastrar produto")
+            print(f"2 - Listar produtos")
+            print(f"3 - Editar produtos")
+            print(f"4 - Vender produtos")
+            print(f"5 - Sair")
 
             # usuario escolhe
             escolha = input(f"Escolha uma opção: ").strip()
@@ -32,54 +63,27 @@ def menu():
             match escolha:
                 case "1":
                     # usuario digita
-                    nome = input(f"Digite o nome do usuario: ").strip().title()
-                    email = input(f"Digite o email do usuario: ").strip().title()
-                    senha = input(f"Digite a senha do usuario: ").strip()
+                    nome = input(f"Digite o produto que quer adicionar: ").strip().title()
+                    preco = float(input(f"Digite o preço do produto: "))
+                    quantidade = int(input(f"Digite a quantidade do preço: "))
                 
-                    criar_usuario(nome, email, senha)
+                    cadastrar_produto(nome, preco, quantidade)
 
                 case "2":
                     limpar()
-                    #menu
-                    print(f"{30*"-"}LISTAR{30*"-"}")
-                    print(f"1 - Procurar usuario pelo nome")
-                    print(f"2 - Procurar usuario pelo email")
-                    print(f"3 - Procurar usuario pelo id")
-
-                    # usuario escolhe
-                    listar = input(f"Escolha uma opção: ").strip()
-
-                    # escolhas da listar
-                    match listar:
-                        case "1":
-                            nome = input(f"Digite o nome do usuario que quer listar: ").strip().title()
-                            listar_usuario(nome)
-
-                        case "2":
-                            email = input(f"Digite o email do usuario que quer listar: ").strip().title()
-                            listar_usuario_email(email)
-
-                        case "3":
-                            # usuario informa
-                            id = input(f"Digite o id do usuario que quer listar: ").strip()
-                            listar_usuario_id(id)
+                    listar_produto()
 
                 case "3":
+                    listar_produto()
                     id = input(f"Digite o id do usuario que você deseja editar: ").strip()
                     limpar()
-                    # menu
-                    print(f"{30*"-"}EDITAR{30*"-"}")
-                    print(f"1 - Editar o nome")
-                    print(f"2 - Editar o email")
-                    print(f"3 - Editar o senha")
-
-                    # usuario escolhe
-                    escolha = input(f"Escolha uma opção: ").strip()
-                    editar_usuario(id, escolha)
+                    editar_produto(id)
 
                 case "4":
+                    listar_produto()
                     id = input(f"Digite o id do usuario que você deseja excluir: ").strip()
-                    excluir_usuario(id)
+                    quanti = int(input(f"Digite a quantidade de produto você quer vender: "))
+                    vender_produto(quanti, id)
 
                 case "5":
                     print(f"Saindo do sistema...")
@@ -92,4 +96,5 @@ def menu():
 
 # so roda o codigo se a branch for main
 if __name__ == '__main__':
-    menu()
+    conta()
+    menu_principal()
