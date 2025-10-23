@@ -6,13 +6,12 @@ from controles.menu_usuario import *
 
 # biblioteca
 import os
-import pwinput
 
 # limpar tela
 limpar = lambda:os.system("cls" if os.name == "nt" else "clear")
 
 # função de menu
-def menu_principal():
+def menu_principal(email, senha):
     # loop
     while True:
         # tratar erros
@@ -36,7 +35,7 @@ def menu_principal():
                     limpar()
                     # usuario digita
                     nome = input(f"Digite o produto que quer adicionar: ").strip().title()
-                    preco = float(input(f"Digite o preço do produto: ").strip().replace(".",","))
+                    preco = float(input(f"Digite o preço do produto: ").strip().replace(",","."))
                     quantidade = int(input(f"Digite a quantidade do preço: ").strip())
 
                     # chama função
@@ -57,7 +56,7 @@ def menu_principal():
                     # usuario digita
                     id = input(f"Digite o id do produto que você deseja editar: ").strip()
                     produto = input(f"Digite o nome do novo produto: ").strip().title()
-                    preco = float(input(f"Digite o novo preço: ").replace(".",",").strip())
+                    preco = float(input(f"Digite o novo preço: ").replace(",",".").strip())
                     quantidade = int(input(f"Digite a nova quantidade: ").strip())
 
                     # chama função
@@ -77,7 +76,7 @@ def menu_principal():
                     vender_produto(quanti, id)
 
                 case "5":
-                    menu_gerenciamento()
+                    menu_gerenciamento(email, senha)
 
                 case "6":
                     print(f"Saindo do sistema...")

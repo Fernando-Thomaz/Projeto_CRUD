@@ -2,6 +2,7 @@
 from serviços.usuario import *
 from serviços.produtos import *
 from serviços.tabelas import *
+from serviços.gerenciamento import *
 
 # biblioteca
 import os
@@ -71,7 +72,7 @@ def admin():
             input(f"Pressione ENTER para continuar")
 
 # função de gerenciamento de conta
-def menu_gerenciamento():
+def menu_gerenciamento(email, senha):
     # loop
     while True:
         # tratar erros
@@ -89,7 +90,7 @@ def menu_gerenciamento():
 
             match escolha:
                 case "1":
-                    listar_info()
+                    listar_info(email)
 
                 case "2":
                     while True:
@@ -103,19 +104,25 @@ def menu_gerenciamento():
 
                         match escolha:
                             case "1":
-                                troca_senha()
+                                senha = input(f'Digite a sua nova senha ou pressione ENTER para cancelar: ').strip()
+                                if senha != "":
+                                    troca_senha(senha, email)
 
                             case "2":
-                                troca_email()
+                                email = input(f'Digite o seu novo email ou pressione ENTER para cancelar: ').strip()
+                                if email != "":
+                                    troca_email(email, senha)
 
                             case "3":
-                                troca_nome()
+                                nome = input(f'Digite o seu novo nome ou pressione ENTER para cancelar: ').strip()
+                                if nome != "":
+                                    troca_nome(nome, email)
 
                             case "4":
                                 break
 
                 case "3":
-                    excluir_conta()
+                    excluir_conta(email)
 
                 case "4":
                     break

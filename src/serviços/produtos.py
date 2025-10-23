@@ -1,9 +1,6 @@
 # pega a função "get_connet"
 from connection import *
 
-# biblioteca
-from passlib.hash import pbkdf2_sha256 as sha256
-
 # função para deletar produtos
 def excluir_produto(id):
     # tratar erros

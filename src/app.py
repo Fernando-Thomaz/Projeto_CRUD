@@ -35,19 +35,19 @@ def menu_conta():
                     email = input(f'Digite o email da conta: ').strip().title()
                     senha = input(f'Digite a senha da conta: ').strip()
                     if criar_usuario(nome, email, senha) == True:
-                        menu_principal()
+                        menu_principal(email, senha)
 
                 case "2":
                     email = input(f'Digite o email da conta: ').strip().title()
                     senha = input(f'Digite a senha da conta: ').strip()
                     if logar_usuario(email, senha) == True:
-                        menu_principal()
+                        menu_principal(email, senha)
 
                 case "3":
                     email = input(f'Digite o email da conta: ').strip().title()
                     senha = input(f'Digite a senha da conta: ').strip()
                     if menu_admin(email, senha) == True:
-                        menu_admin()
+                        admin()
 
                 case "4":
                     print(f'Saindo do sistema...')
