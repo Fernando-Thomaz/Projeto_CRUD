@@ -2,7 +2,6 @@
 from connection import *
 
 # biblioteca
-import pwinput
 from passlib.hash import pbkdf2_sha256 as sha256
 
 # função listar usuario
@@ -119,7 +118,7 @@ def criar_usuario(nome, email, senha):
         return False
 
 # função admin
-def admin(email, senha):
+def menu_admin(email, senha):
     try:
         # conectar ao banco
         conn = get_connet_pro()

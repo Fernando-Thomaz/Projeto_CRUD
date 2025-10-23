@@ -2,7 +2,6 @@
 from connection import *
 
 # biblioteca
-import pwinput
 from passlib.hash import pbkdf2_sha256 as sha256
 
 # função para criar o banco
