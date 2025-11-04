@@ -76,7 +76,15 @@ def menu_principal(email, senha):
                     vender_produto(quanti, id)
 
                 case "5":
-                    menu_gerenciamento(email, senha)
+                    print(f"Verificação de conta")
+                    email = input("Digite o email da conta: ").strip().title()
+                    senha = pwinput.pwinput(prompt="Digite a senha da conta: ").strip()
+                    if logar_usuario(email, senha) == True:
+                        menu_gerenciamento(email,)
+
+                    else:
+                        print("Não conseguimos verificar sua conta")
+                        input("Pressione ENTER para continuar")
 
                 case "6":
                     print(f"Saindo do sistema...")

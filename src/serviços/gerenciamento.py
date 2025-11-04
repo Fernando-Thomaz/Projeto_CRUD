@@ -5,7 +5,7 @@ from connection import *
 from passlib.hash import pbkdf2_sha256 as sha256
 
 # função listar usuario
-def listar_info(email):
+def listar_info(email,):
     # trata erros
     try:
         # conecta ao banco
@@ -15,7 +15,7 @@ def listar_info(email):
         cursor = conn.cursor()
 
         # executa o codigo no sql
-        cursor.execute('SELECT ID, NOME, EMAIL, SENHA, ADMIN FROM TB_USUARIO WHERE EMAIL = ?', (email))
+        cursor.execute('SELECT ID, NOME, EMAIL, SENHA, ADMIN FROM TB_USUARIO WHERE EMAIL = ?', (email,))
     
         # salva as coisas selecionadas
         produtos = cursor.fetchall()
@@ -40,7 +40,7 @@ def listar_info(email):
         input(f"Pressione ENTER para continuar")
 
 # função para excluir usuario
-def excluir_conta(email):
+def excluir_conta(email,):
     # tratar erros
     try:
         # conecta ao banco
@@ -50,7 +50,7 @@ def excluir_conta(email):
         cursor = conn.cursor()
 
         # atualiza as informações
-        cursor.execute("DELETE FROM TB_USUARIO WHERE EMAIL = ?", (email))
+        cursor.execute("DELETE FROM TB_USUARIO WHERE EMAIL = ?", (email,))
 
         # salvar no banco
         conn.commit()
@@ -63,7 +63,7 @@ def excluir_conta(email):
         input(f"Pressione ENTER para continuar")
 
 # função para alterar usuario
-def troca_senha(senha, email):
+def troca_senha(nova_senha, email):
     # tratar erros
     try:
         # conecta ao banco
@@ -73,10 +73,10 @@ def troca_senha(senha, email):
         cursor = conn.cursor()
 
         # criptografa as senha
-        senha = sha256.hash(senha)
+        nova_senha = sha256.hash(nova_senha,)
 
         # atualiza as informações
-        cursor.execute("UPDATE TB_USUARIO SET SENHA = ? WHERE EMAIL = ?", (senha, email))
+        cursor.execute("UPDATE TB_USUARIO SET SENHA = ? WHERE EMAIL = ?", (nova_senha, email))
 
         # salvar no banco
         conn.commit()
@@ -89,7 +89,7 @@ def troca_senha(senha, email):
         input(f"Pressione ENTER para continuar")
 
 # função para alterar usuario
-def troca_email(email, senha):
+def troca_email(novo_email, email):
     # tratar erros
     try:
         # conecta ao banco
@@ -99,12 +99,13 @@ def troca_email(email, senha):
         cursor = conn.cursor()
 
         # atualiza as informações
-        cursor.execute("UPDATE TB_USUARIO SET EMAIL = ? WHERE SENHA = ?", (email, senha))
+        cursor.execute("UPDATE TB_USUARIO SET EMAIL = ? WHERE EMAIL = ?", (novo_email, email))
 
         # salvar no banco
         conn.commit()
         print(f"alterado com sucesso!!")
         input(f"Pressione ENTER para continuar")
+        return novo_email
 
     # tratar erros
     except Exception as e:
@@ -112,7 +113,7 @@ def troca_email(email, senha):
         input(f"Pressione ENTER para continuar")
 
 # função para alterar usuario
-def troca_nome(email, nome):
+def troca_nome(novo_nome, email):
     # tratar erros
     try:
         # conecta ao banco
@@ -122,7 +123,7 @@ def troca_nome(email, nome):
         cursor = conn.cursor()
 
         # atualiza as informações
-        cursor.execute("UPDATE TB_USUARIO SET NOME = ? WHERE EMAIL = ?", (nome, email))
+        cursor.execute("UPDATE TB_USUARIO SET NOME = ? WHERE EMAIL = ?", (novo_nome, email))
 
         # salvar no banco
         conn.commit()

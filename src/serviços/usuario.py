@@ -81,7 +81,7 @@ def alterar_usuario(nome, email, senha, admin, id):
 
         # salvar no banco
         conn.commit()
-        print(f" alterado com sucesso!!")
+        print(f"alterado com sucesso!!")
         input(f"Pressione ENTER para continuar")
 
     # tratar erros

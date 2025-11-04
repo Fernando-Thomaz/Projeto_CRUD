@@ -43,7 +43,7 @@ def admin():
                     listar_usuario()
 
                     # usuario insere
-                    id = input(f'Digite o id do usuario que deseja alterar').strip()
+                    id = input(f'Digite o id do usuario que deseja alterar: ').strip()
                     nome = input(f"Digite o nome do usuario: ").strip().title()
                     email = input(f"Digite o novo email: ").strip().title()
                     senha = pwinput.pwinput(prompt="Digite a nova senha: ").strip()
@@ -72,7 +72,7 @@ def admin():
             input(f"Pressione ENTER para continuar")
 
 # função de gerenciamento de conta
-def menu_gerenciamento(email, senha):
+def menu_gerenciamento(email):
     # loop
     while True:
         # tratar erros
@@ -104,25 +104,27 @@ def menu_gerenciamento(email, senha):
 
                         match escolha:
                             case "1":
-                                senha = input(f'Digite a sua nova senha ou pressione ENTER para cancelar: ').strip()
-                                if senha != "":
-                                    troca_senha(senha, email)
+                                nova_senha = pwinput.pwinput(prompt='Digite a sua nova senha ou pressione ENTER para cancelar: ').strip()
+                                if nova_senha != "":
+                                    troca_senha(nova_senha, email)
 
                             case "2":
-                                email = input(f'Digite o seu novo email ou pressione ENTER para cancelar: ').strip()
-                                if email != "":
-                                    troca_email(email, senha)
+                                novo_email = input(f'Digite o seu novo email ou pressione ENTER para cancelar: ').strip().title()
+                                if novo_email != "":
+                                    if troca_email(novo_email, email) == novo_email:
+                                        email = novo_email
 
                             case "3":
-                                nome = input(f'Digite o seu novo nome ou pressione ENTER para cancelar: ').strip()
-                                if nome != "":
-                                    troca_nome(nome, email)
+                                novo_nome = input(f'Digite o seu novo nome ou pressione ENTER para cancelar: ').strip().title()
+                                if novo_nome != "":
+                                    troca_nome(novo_nome, email)
 
                             case "4":
                                 break
 
                 case "3":
                     excluir_conta(email)
+                    break
 
                 case "4":
                     break
