@@ -63,32 +63,6 @@ def excluir_usuario(id):
         print(f'Falha ao editar usuario: {e}')
         input(f"Pressione ENTER para continuar")
 
-# função para alterar usuario
-def alterar_usuario(nome, email, senha, admin, id):
-    # tratar erros
-    try:
-        # conecta ao banco
-        conn = get_connet_pro()
-
-        # comanda o banco
-        cursor = conn.cursor()
-
-        # criptografa as senha
-        senha = sha256.hash(senha)
-
-        # atualiza as informações
-        cursor.execute("UPDATE TB_USUARIO SET NOME = ?, EMAIL = ?, SENHA = ?, ADMIN = ? WHERE ID = ?", (nome, email, senha, admin, id))
-
-        # salvar no banco
-        conn.commit()
-        print(f"alterado com sucesso!!")
-        input(f"Pressione ENTER para continuar")
-
-    # tratar erros
-    except Exception as e:
-        print(f'Falha ao editar usuario: {e}')
-        input(f"Pressione ENTER para continuar")
-
 # função para criar usuario
 def criar_usuario(nome, email, senha):
     # tratar erros

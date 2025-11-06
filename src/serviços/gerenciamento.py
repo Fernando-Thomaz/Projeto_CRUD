@@ -134,3 +134,26 @@ def troca_nome(novo_nome, email):
     except Exception as e:
         print(f'Falha ao editar usuario: {e}')
         input(f"Pressione ENTER para continuar")
+
+# identificação de usuario
+def identificar_usuario(id,):
+    # tratar erros
+    try:
+        # conecta ao banco
+        conn = get_connet_pro()
+
+        # comanda o banco
+        cursor = conn.cursor()
+
+        # atualiza as informações
+        cursor.execute("SELECT EMAIL FROM TB_USUARIO WHERE ID = ?", (id,))
+
+        # salvar no banco
+        email = cursor.fetchone()
+        print('Conexão bem sucedida!')
+        return email
+
+    # tratar erros
+    except Exception as e:
+        print(f'Falha ao identificar usuario: {e}')
+        input(f"Pressione ENTER para continuar")
